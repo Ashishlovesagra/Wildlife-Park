@@ -145,3 +145,7 @@ node server.js
 - **CORS**: Configures Cross-Origin Resource Sharing.
 - **Rate Limiting**: Prevents brute-force attacks by limiting request rates.
 - **JWT Authentication**: Secures API routes with tokens.
+
+## Project Design and Implementation
+
+This project was designed and implemented by **Ashish Singh**.
