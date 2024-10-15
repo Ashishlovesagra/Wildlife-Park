@@ -1,23 +1,34 @@
-## Project File Structure
+# Wildlife Park API
 
+The **Wildlife Park API** allows the management of Tiger Reserves and user operations. It provides authentication, CRUD functionality for reserves, and more.
+
+## Project Structure
+
+```bash
 wildlife-park-api/
 │
 ├── config/
-│   └── db.js
+│   └── db.js                   # Database configuration file (MongoDB connection setup)
+│
 ├── controllers/
-│   ├── tigerReserveController.js
-│   └── userController.js
+│   ├── tigerReserveController.js   # Controller for managing Tiger Reserve CRUD operations
+│   └── userController.js           # Controller for managing user-related operations (login, registration, etc.)
+│
 ├── middlewares/
-│   ├── auth.js
+│   └── auth.js                     # Middleware for authentication (protect routes and check admin permissions)
+│
 ├── models/
-│   ├── tigerReserve.js
-│   └── userModel.js
+│   ├── tigerReserve.js              # Mongoose schema/model for the Tiger Reserves
+│   └── userModel.js                 # Mongoose schema/model for Users
+│
 ├── routes/
-│   ├── tigerReserveRoutes.js
-│   └── userRoutes.js
-├── .env
-├── server.js
-└── package.json
+│   ├── tigerReserveRoutes.js        # Routes for Tiger Reserve operations (CRUD)
+│   └── userRoutes.js                # Routes for User operations (register, login, etc.)
+│
+├── .env                             # Environment variables (e.g., database URI, secret keys)
+├── server.js                        # Main server file (Entry point of the application)
+└── package.json                     # Project dependencies and scripts
+
 
 ### User APIs End Points
 
