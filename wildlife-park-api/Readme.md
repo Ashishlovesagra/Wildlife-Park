@@ -1,6 +1,6 @@
 # Wildlife Park API
 
-The **Wildlife Park API** allows the management of Tiger Reserves and user operations. It provides authentication, CRUD functionality for reserves, and more.
+The Wildlife Park API is a Node.js and Express-based application that allows for managing tiger reserves and user authentication. It supports CRUD operations for tiger reserves, with role-based access for admin users, and includes authentication features like user login, registration, and forgot password functionality.
 
 ## Project Structure
 
@@ -8,26 +8,23 @@ The **Wildlife Park API** allows the management of Tiger Reserves and user opera
 wildlife-park-api/
 │
 ├── config/
-│   └── db.js                   # Database configuration file (MongoDB connection setup)
-│
+│   └── db.js                  # Database connection setup
 ├── controllers/
-│   ├── tigerReserveController.js   # Controller for managing Tiger Reserve CRUD operations
-│   └── userController.js           # Controller for managing user-related operations (login, registration, etc.)
-│
+│   ├── tigerReserveController.js  # Logic for managing Tiger Reserve data
+│   └── userController.js          # Logic for user registration, login, and authentication
 ├── middlewares/
-│   └── auth.js                     # Middleware for authentication (protect routes and check admin permissions)
-│
+│   ├── auth.js                    # Authentication middleware for protecting routes
 ├── models/
-│   ├── tigerReserve.js              # Mongoose schema/model for the Tiger Reserves
-│   └── userModel.js                 # Mongoose schema/model for Users
-│
+│   ├── tigerReserve.js             # Tiger Reserve schema and model
+│   └── userModel.js                # User schema and model
 ├── routes/
-│   ├── tigerReserveRoutes.js        # Routes for Tiger Reserve operations (CRUD)
-│   └── userRoutes.js                # Routes for User operations (register, login, etc.)
-│
-├── .env                             # Environment variables (e.g., database URI, secret keys)
-├── server.js                        # Main server file (Entry point of the application)
-└── package.json                     # Project dependencies and scripts
+│   ├── tigerReserveRoutes.js       # Routes for managing Tiger Reserves
+│   └── userRoutes.js               # Routes for user authentication and management
+├── .env                            # Environment variables configuration (e.g., database URL, JWT secret)
+├── server.js                       # Main server file to run the application
+├── app.js                          # Express application configuration and middleware setup
+└── package.json                    # Project dependencies and scripts
+```bash
 
 
 ### User APIs End Points
