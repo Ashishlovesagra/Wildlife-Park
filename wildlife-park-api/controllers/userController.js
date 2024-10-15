@@ -1,59 +1,52 @@
+// controllers/userController.js
 const User = require('../models/userModel');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 
-// Generate JWT token
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
-};
-
-// Register new user
-exports.registerUser = async (req, res) => {
-  const { username, email, password, phone, answer } = req.body;
+// Register a new user
+exports.register = async (req, res) => {
+  const { username, email, password, phoneNumber, answer } = req.body;
 
   try {
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
-    }
-
-    const user = await User.create({
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({
       username,
       email,
-      password,
-      phone,
+      password: hashedPassword,
+      phoneNumber,
       answer,
     });
-
-    res.status(201).json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      token: generateToken(user._id),
-    });
+    await user.save();
+    res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Error registering user', error });
   }
 };
 
-// User login
-exports.loginUser = async (req, res) => {
+// Login user
+exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email });
-    if (user && (await user.matchPassword(password))) {
-      res.status(200).json({
-        _id: user._id,
-        username: user.username,
-        email: user.email,
-        token: generateToken(user._id),
-      });
-    } else {
-      res.status(401).json({ message: 'Invalid email or password' });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+
+    res.json({ token, user });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Error logging in', error });
   }
 };
 
@@ -63,12 +56,81 @@ exports.forgotPassword = async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    if (user && user.answer === answer) {
-      res.status(200).json({ message: 'Security answer verified' });
-    } else {
-      res.status(400).json({ message: 'Invalid answer' });
+    if (!user || user.answer !== answer) {
+      return res.status(401).json({ message: 'Invalid email or answer' });
     }
+
+    // Generate a reset token
+    const token = crypto.randomBytes(32).toString('hex');
+    user.resetToken = token;
+    user.resetTokenExpiration = Date.now() + 3600000; // Token valid for 1 hour
+    await user.save();
+
+    // Send the token via email
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Password Reset',
+      text: `You requested a password reset. Please use the following token: ${token}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return res.status(500).json({ message: 'Error sending email', error });
+      }
+      res.json({ message: 'Password recovery initiated', token });
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Error processing request', error });
   }
+};
+
+// Reset password
+exports.resetPassword = async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  try {
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiration: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired token' });
+    }
+
+    // Hash the new password
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.resetToken = undefined; // Clear the reset token
+    user.resetTokenExpiration = undefined; // Clear the expiration
+    await user.save();
+
+    res.json({ message: 'Password has been reset successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error resetting password', error });
+  }
+};
+
+// Get all users (Admin only)
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching users', error });
+  }
+};
+
+// Logout (Client-side handled, just invalidate token)
+exports.logout = (req, res) => {
+  // Implement client-side logout logic; JWT tokens are stateless
+  res.json({ message: 'User logged out' });
 };

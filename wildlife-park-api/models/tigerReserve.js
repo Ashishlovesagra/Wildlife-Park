@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const reserveSchema = new mongoose.Schema({
+const tigerReserveSchema = new mongoose.Schema({
   reserveName: { type: String, required: true, trim: true },
   photo: { type: String, required: true },
   shortOverview: { type: [String], required: true },
@@ -80,4 +80,4 @@ const reserveSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Reserve', reserveSchema);
+module.exports = mongoose.model("TigerReserve", tigerReserveSchema);
