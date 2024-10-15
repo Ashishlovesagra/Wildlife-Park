@@ -24,38 +24,75 @@ wildlife-park-api/
 ├── server.js                       # Main server file to run the application
 ├── app.js                          # Express application configuration and middleware setup
 └── package.json                    # Project dependencies and scripts
-bash```
+```
 
 
-### User APIs End Points
+## User APIs End Points
 
-1. Register User
--  Method: POST
--  End Point: /api/users/register.
+1. **Register User**
+   - **Method**: POST
+   - **End Point**: `/api/users/register`
+   - **Description**: Register a new user. Requires `username`, `email`, `password`, `phone number`, and `answer` (for forgot password).
+   - **Admin Only**: No
 
-2. Login User
--  Method: POST
--  End Point: /api/users/login.
+2. **Login User**
+   - **Method**: POST
+   - **End Point**: `/api/users/login`
+   - **Description**: Login a user with their `email` and `password`. Returns a token.
+   - **Admin Only**: No
 
-3. Forgot Password
--  Method: POST
--  End Point: /api/users/forgot-password.
+3. **Forgot Password**
+   - **Method**: POST
+   - **End Point**: `/api/users/forgot-password`
+   - **Description**: Sends a password reset link to the user’s email.
+   - **Admin Only**: No
 
-4. Reset Password
--  Method: POST
--  End Point: /api/users/reset-password.
+4. **Reset Password**
+   - **Method**: POST
+   - **End Point**: `/api/users/reset-password`
+   - **Description**: Resets the user password by validating the token sent via the forgot password process.
+   - **Admin Only**: No
 
-5. Logout User
--  Method: POST
--  End Point: /api/users/logout.
+5. **Logout User**
+   - **Method**: POST
+   - **End Point**: `/api/users/logout`
+   - **Description**: Logs the user out by invalidating the token.
+   - **Admin Only**: No
 
-6. Get All User
--  Method: GET
--  End Point: /api/users/all-users.
+6. **Get All Users**
+   - **Method**: GET
+   - **End Point**: `/api/users/all-users`
+   - **Description**: Retrieves a list of all users (Admin access required).
+   - **Admin Only**: Yes
 
-### Reserve APIs End Points  
+## Reserve APIs End Points
 
-6. Create Reserve
--  Method: POST
--  End Point: /api/reserves.
+1. **Create Reserve**
+   - **Method**: POST
+   - **End Point**: `/api/reserves`
+   - **Description**: Creates a new tiger reserve. Only an admin can create a reserve. Requires fields like `reserveName`, `location`, `nearestRailwayStation`, `nearestAirport`, `safariMode`, `flora`, `fauna`, and a `photo` to be uploaded.
+   - **Admin Only**: Yes
 
+2. **Get All Reserves**
+   - **Method**: GET
+   - **End Point**: `/api/reserves`
+   - **Description**: Retrieves a list of all tiger reserves.
+   - **Admin Only**: No
+
+3. **Get Reserve by ID**
+   - **Method**: GET
+   - **End Point**: `/api/reserves/:id`
+   - **Description**: Retrieves details of a specific tiger reserve by its ID.
+   - **Admin Only**: No
+
+4. **Update Reserve**
+   - **Method**: PUT
+   - **End Point**: `/api/reserves/:id`
+   - **Description**: Updates an existing reserve's information. Only admin users can perform this operation.
+   - **Admin Only**: Yes
+
+5. **Delete Reserve**
+   - **Method**: DELETE
+   - **End Point**: `/api/reserves/:id`
+   - **Description**: Deletes a tiger reserve by its ID. Only admin users can perform this operation.
+   - **Admin Only**: Yes
