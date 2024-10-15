@@ -1,6 +1,21 @@
 # Wildlife Park API
 
-The Wildlife Park API is a Node.js and Express-based application that allows for managing tiger reserves and user authentication. It supports CRUD operations for tiger reserves, with role-based access for admin users, and includes authentication features like user login, registration, and forgot password functionality.
+This project is an API for managing tiger reserves, built with **Node.js**, **Express.js**, and **MongoDB**. It includes user authentication, role-based access control, and the ability for admins to upload, update, and delete tiger reserves.
+
+## Table of Contents
+1. [Project Setup](#project-setup)
+2. [Folder Structure](#folder-structure)
+3. [Environment Variables](#environment-variables)
+4. [Installation](#installation)
+5. [Running the Project](#running-the-project)
+6. [API Endpoints](#api-endpoints)
+    - [User APIs](#user-apis)
+    - [Tiger Reserve APIs](#tiger-reserve-apis)
+7. [Security Features](#security-features)
+
+## Project Setup
+
+This project follows the **MVC pattern** (Model-View-Controller) with Node.js and MongoDB. It includes authentication, role-based authorization, and API security measures using packages like **cors**.
 
 ## Project Structure
 
@@ -8,12 +23,12 @@ The Wildlife Park API is a Node.js and Express-based application that allows for
 wildlife-park-api/
 │
 ├── config/
-│   └── db.js                  # Database connection setup
+│   └── db.js                       # Database connection setup
 ├── controllers/
-│   ├── tigerReserveController.js  # Logic for managing Tiger Reserve data
-│   └── userController.js          # Logic for user registration, login, and authentication
+│   ├── tigerReserveController.js   # Logic for managing Tiger Reserve data
+│   └── userController.js           # Logic for user registration, login, and authentication
 ├── middlewares/
-│   ├── auth.js                    # Authentication middleware for protecting routes
+│   ├── auth.js                     # Authentication middleware for protecting routes
 ├── models/
 │   ├── tigerReserve.js             # Tiger Reserve schema and model
 │   └── userModel.js                # User schema and model
@@ -26,6 +41,34 @@ wildlife-park-api/
 └── package.json                    # Project dependencies and scripts
 ```
 
+
+## Environment Variables
+
+Make sure to create a `.env` file at the root of the project with the following variables:
+
+```bash
+MONGO_URI=<Your MongoDB connection string>
+JWT_SECRET=<Your JWT Secret>
+PORT=5000
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_app_password  
+```
+
+## Installation
+
+To install the project dependencies, clone the repository and run:
+
+```bash
+npm install
+```
+
+## Running the Project
+
+To start the project in development mode, use:
+
+```bash
+node server.js
+```
 
 ## User APIs End Points
 
@@ -96,3 +139,9 @@ wildlife-park-api/
    - **End Point**: `/api/reserves/:id`
    - **Description**: Deletes a tiger reserve by its ID. Only admin users can perform this operation.
    - **Admin Only**: Yes
+
+## Security Features
+
+- **CORS**: Configures Cross-Origin Resource Sharing.
+- **Rate Limiting**: Prevents brute-force attacks by limiting request rates.
+- **JWT Authentication**: Secures API routes with tokens.
