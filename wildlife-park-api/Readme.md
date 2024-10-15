@@ -24,7 +24,7 @@ wildlife-park-api/
 ├── server.js                       # Main server file to run the application
 ├── app.js                          # Express application configuration and middleware setup
 └── package.json                    # Project dependencies and scripts
-bash````
+bash```
 
 
 ### User APIs End Points
