@@ -1,0 +1,10 @@
+.logo{
+    width: 180px;
+}
+.background{
+    z-index: 2;
+    background-color: rgb(255, 255, 255);
+}
+.h-80{
+    height: 80%;
+  }
